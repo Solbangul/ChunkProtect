@@ -1,0 +1,8 @@
+name: ChunkProtect
+main: io.github.solbangul.Main
+version: 0.1
+api-version: 1.20
+
+commands:
+  청크보호:
+    description: 청크를 보호하는 명령어입니다.
