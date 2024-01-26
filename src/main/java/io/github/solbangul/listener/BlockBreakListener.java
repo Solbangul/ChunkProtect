@@ -26,6 +26,9 @@ public class BlockBreakListener implements Listener {
         boolean isChunkOwnedByAnyPlayerOnline = false;
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
             if (config.getLongList(onlinePlayer.getUniqueId() + ".chunk").contains(chunkKey)) {
+                if (config.getLongList(onlinePlayer.getUniqueId() + ".whitelist").contains(player.getName())) {
+                    break;
+                }
                 isChunkOwnedByAnyPlayerOnline = true;
                 chunkPlayer = onlinePlayer.getName();
                 break;
@@ -34,6 +37,9 @@ public class BlockBreakListener implements Listener {
         boolean isChunkOwnedByAnyPlayerOffline = false;
         for (OfflinePlayer offlinePlayer : Bukkit.getOfflinePlayers()) {
             if (config.getLongList(offlinePlayer.getUniqueId() + ".chunk").contains(chunkKey)) {
+                if (config.getLongList(offlinePlayer.getUniqueId() + ".whitelist").contains(player.getName())) {
+                    break;
+                }
                 isChunkOwnedByAnyPlayerOffline = true;
                 break;
             }

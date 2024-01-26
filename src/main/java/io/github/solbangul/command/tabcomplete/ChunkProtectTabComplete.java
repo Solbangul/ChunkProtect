@@ -23,8 +23,19 @@ public class ChunkProtectTabComplete implements TabCompleter {
             completions.add("리로드");
             completions.add("관리자모드");
             completions.add("강제제거");
+            completions.add("화이트리스트");
 
             return completions;
+        }
+        if (args.length == 2) {
+            if (args[0].equals("화이트리스트")) {
+                List<String> completions = new ArrayList<>();
+
+                completions.add("추가");
+                completions.add("삭제");
+
+                return completions;
+            }
         }
         return Collections.emptyList();
     }

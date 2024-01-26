@@ -123,6 +123,48 @@ public class ChunkProtectCommand implements CommandExecutor {
                 }
             }
         }
+        if (args.length == 3) {
+            if (args[0].equals("화이트리스트")) {
+                switch (args[1]) {
+                    case "추가" -> {
+                        if (Bukkit.getPlayer(args[2]) == null) {
+                            player.sendMessage("§c존재하지 않는 플레이어입니다.");
+                            return false;
+                        }
+                        Player target_player = Bukkit.getPlayer(args[2]);
+                        if (config.getStringList(player.getUniqueId() + ".whitelist").contains(target_player.getName())) {
+                            player.sendMessage("§c이미 화이트리스트입니다.");
+                            return false;
+                        }
+                        List<String> playerWhitelist = config.getStringList(player.getUniqueId() + ".whitelist");
+                        playerWhitelist.add(target_player.getName());
+                        config.set(player.getUniqueId() + ".whitelist", playerWhitelist);
+                        plugin.saveConfig();
+
+                        player.sendMessage("§a청크를 " + target_player.getName() + "과 공유합니다.");
+                        return false;
+                    }
+                    case "삭제" -> {
+                        if (Bukkit.getPlayer(args[2]) == null) {
+                            player.sendMessage("§c존재하지 않는 플레이어입니다.");
+                            return false;
+                        }
+                        Player target_player = Bukkit.getPlayer(args[2]);
+                        if (config.getStringList(player.getUniqueId() + ".whitelist").contains(target_player.getName())) {
+                            player.sendMessage("§c이미 화이트리스트입니다.");
+                            return false;
+                        }
+                        List<String> playerWhitelist = config.getStringList(player.getUniqueId() + ".whitelist");
+                        playerWhitelist.remove(target_player.getName());
+                        config.set(player.getUniqueId() + ".whitelist", playerWhitelist);
+                        plugin.saveConfig();
+
+                        player.sendMessage("§a청크를 " + target_player.getName() + "과 공유를 삭제합니다.");
+                        return false;
+                    }
+                }
+            }
+        }
         return false;
     }
 }
