@@ -1,8 +1,10 @@
 package io.github.solbangul.command.tabcomplete;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,6 +37,23 @@ public class ChunkProtectTabComplete implements TabCompleter {
                 completions.add("삭제");
 
                 return completions;
+            }
+        }
+        if (args.length == 3) {
+            switch (args[1]) {
+                case "추가", "삭제" -> {
+                    List<String> completions = new ArrayList<>();
+
+                    for (Player player : Bukkit.getOnlinePlayers()) {
+                        if (player.getName().startsWith(args[2])) {
+                            completions.add(player.getName());
+                        } else {
+                            completions.add(player.getName());
+                        }
+                    }
+
+                    return completions;
+                }
             }
         }
         return Collections.emptyList();
