@@ -39,6 +39,7 @@ public class BlockPlaceListener implements Listener {
             }
         }
         if (isChunkOwnedByAnyPlayerOnline | isChunkOwnedByAnyPlayerOffline) {
+            if (config.getLongList(player.getUniqueId() + ".chunk").contains(chunkKey)) return;
             event.setCancelled(true);
             player.sendMessage("§c다른 플레이어가 소유하고 있는 청크입니다.\n" + chunkPlayer);
         }
