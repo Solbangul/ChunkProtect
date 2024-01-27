@@ -30,7 +30,7 @@ public class Main extends JavaPlugin {
         );
 
         getCommand("청크보호").setExecutor(new ChunkProtectCommand(instance));
-        getCommand("청크보호").setTabCompleter(new ChunkProtectTabComplete());
+        getCommand("청크보호").setTabCompleter(new ChunkProtectTabComplete(instance));
     }
 
     private void registerEvents(Listener... listeners) {

@@ -49,6 +49,7 @@ public class ChunkProtectCommand implements CommandExecutor {
                     List<Long> playerChunk = config.getLongList(player.getUniqueId() + ".chunk");
                     playerChunk.add(chunk);
                     config.set(player.getUniqueId() + ".chunk", playerChunk);
+                    config.set(player.getUniqueId() + ".name", player.getName());
                     plugin.saveConfig();
 
                     player.sendMessage("§a해당 청크를 다른 플레이어로부터 보호합니다.");
@@ -150,8 +151,8 @@ public class ChunkProtectCommand implements CommandExecutor {
                             return false;
                         }
                         Player target_player = Bukkit.getPlayer(args[2]);
-                        if (config.getStringList(player.getUniqueId() + ".whitelist").contains(target_player.getName())) {
-                            player.sendMessage("§c이미 화이트리스트입니다.");
+                        if (!config.getStringList(player.getUniqueId() + ".whitelist").contains(target_player.getName())) {
+                            player.sendMessage("§c화이트리스트가 아닙니다.");
                             return false;
                         }
                         List<String> playerWhitelist = config.getStringList(player.getUniqueId() + ".whitelist");

@@ -1,6 +1,8 @@
 package io.github.solbangul.listener;
 
 import io.github.solbangul.Main;
+import net.kyori.adventure.text.Component;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -26,6 +28,9 @@ public class BlockPlaceListener implements Listener {
         boolean isChunkOwnedByAnyPlayerOnline = false;
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
             if (config.getLongList(onlinePlayer.getUniqueId() + ".chunk").contains(chunkKey)) {
+                if (config.getStringList(onlinePlayer.getUniqueId() + ".whitelist").contains(player.getName())) {
+                    break;
+                }
                 isChunkOwnedByAnyPlayerOnline = true;
                 chunkPlayer = onlinePlayer.getName();
                 break;
@@ -34,7 +39,11 @@ public class BlockPlaceListener implements Listener {
         boolean isChunkOwnedByAnyPlayerOffline = false;
         for (OfflinePlayer offlinePlayer : Bukkit.getOfflinePlayers()) {
             if (config.getLongList(offlinePlayer.getUniqueId() + ".chunk").contains(chunkKey)) {
+                if (config.getStringList(offlinePlayer.getUniqueId() + ".whitelist").contains(player.getName())) {
+                    break;
+                }
                 isChunkOwnedByAnyPlayerOffline = true;
+                chunkPlayer = config.getString(offlinePlayer.getUniqueId() + ".name");
                 break;
             }
         }
@@ -43,7 +52,7 @@ public class BlockPlaceListener implements Listener {
                 return;
             }
             event.setCancelled(true);
-            player.sendMessage("§c다른 플레이어가 소유하고 있는 청크입니다.\n" + chunkPlayer);
+            player.sendActionBar(Component.text("§c해당 청크는 보호를 받는 중입니다. " + chunkPlayer));
         }
     }
 }

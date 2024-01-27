@@ -1,6 +1,7 @@
 package io.github.solbangul.listener;
 
 import io.github.solbangul.Main;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -25,17 +26,26 @@ public class InteractListener implements Listener {
             return;
         }
         long chunkKey = event.getClickedBlock().getChunk().getChunkKey();
+        String chunkPlayer = "찾을 수 없음";
         boolean isChunkOwnedByAnyPlayerOnline = false;
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
             if (config.getLongList(onlinePlayer.getUniqueId() + ".chunk").contains(chunkKey)) {
+                if (config.getStringList(onlinePlayer.getUniqueId() + ".whitelist").contains(player.getName())) {
+                    break;
+                }
                 isChunkOwnedByAnyPlayerOnline = true;
+                chunkPlayer = onlinePlayer.getName();
                 break;
             }
         }
         boolean isChunkOwnedByAnyPlayerOffline = false;
         for (OfflinePlayer offlinePlayer : Bukkit.getOfflinePlayers()) {
             if (config.getLongList(offlinePlayer.getUniqueId() + ".chunk").contains(chunkKey)) {
+                if (config.getStringList(offlinePlayer.getUniqueId() + ".whitelist").contains(player.getName())) {
+                    break;
+                }
                 isChunkOwnedByAnyPlayerOffline = true;
+                chunkPlayer = config.getString(offlinePlayer.getUniqueId() + ".name");
                 break;
             }
         }
@@ -44,6 +54,7 @@ public class InteractListener implements Listener {
                 return;
             }
             event.setCancelled(true);
+            player.sendActionBar(Component.text("§c해당 청크는 보호를 받는 중입니다. " + chunkPlayer));
         }
     }
 }

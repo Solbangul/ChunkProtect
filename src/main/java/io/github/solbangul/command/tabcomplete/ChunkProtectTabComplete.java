@@ -1,9 +1,11 @@
 package io.github.solbangul.command.tabcomplete;
 
+import io.github.solbangul.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -14,9 +16,16 @@ import java.util.List;
 
 public class ChunkProtectTabComplete implements TabCompleter {
 
+    private final FileConfiguration config;
+
+    public ChunkProtectTabComplete(Main main) {
+        this.config = main.getConfig();
+    }
+
     @Nullable
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        if (!(sender instanceof Player player)) return Collections.emptyList();
         if (args.length == 1) {
             List<String> completions = new ArrayList<>();
 
@@ -41,18 +50,21 @@ public class ChunkProtectTabComplete implements TabCompleter {
         }
         if (args.length == 3) {
             switch (args[1]) {
-                case "추가", "삭제" -> {
+                case "추가" -> {
                     List<String> completions = new ArrayList<>();
 
-                    for (Player player : Bukkit.getOnlinePlayers()) {
-                        if (player.getName().startsWith(args[2])) {
-                            completions.add(player.getName());
+                    for (Player playerAll : Bukkit.getOnlinePlayers()) {
+                        if (playerAll.getName().startsWith(args[2])) {
+                            completions.add(playerAll.getName());
                         } else {
-                            completions.add(player.getName());
+                            completions.add(playerAll.getName());
                         }
                     }
 
                     return completions;
+                }
+                case "삭제" -> {
+                    return config.getStringList(player.getUniqueId() + ".whitelist");
                 }
             }
         }
