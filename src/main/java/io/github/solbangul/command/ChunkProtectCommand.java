@@ -57,7 +57,7 @@ public class ChunkProtectCommand implements CommandExecutor {
                 }
                 case "제거" -> {
                     long chunk = player.getChunk().getChunkKey();
-                    if (config.getLong(player.getUniqueId() + ".chunk") == chunk) {
+                    if (!config.getLongList(player.getUniqueId() + ".chunk").contains(chunk)) {
                         player.sendMessage("§c해당 청크를 가지고 있지 않습니다.");
                         return false;
                     }
